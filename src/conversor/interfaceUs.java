@@ -33,6 +33,39 @@ public class interfaceUs extends JFrame implements ActionListener{
         panel.add(comboBox);
         panel.add(button1);
         add(panel);
+
+        button1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Abre la ventana para introducir el número
+                JFrame introducirNumeroFrame = new JFrame("Introducir número");
+                JLabel introducirNumeroLabel = new JLabel("Introduce un número:");
+                JTextField introducirNumeroTextField = new JTextField(10);
+                JButton introducirNumeroAceptarButton = new JButton("Aceptar");
+                JPanel introducirNumeroPanel = new JPanel();
+                introducirNumeroPanel.add(introducirNumeroLabel);
+                introducirNumeroPanel.add(introducirNumeroTextField);
+                introducirNumeroPanel.add(introducirNumeroAceptarButton);
+                introducirNumeroFrame.add(introducirNumeroPanel);
+                introducirNumeroFrame.pack();
+                introducirNumeroFrame.setLocationRelativeTo(null);
+                introducirNumeroFrame.setVisible(true);
+
+                // Agrega un ActionListener al botón "Aceptar" de la ventana para introducir el número
+                introducirNumeroAceptarButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        // Cierra la ventana para introducir el número
+                        introducirNumeroFrame.dispose();
+
+                        // Abre la nueva ventana con las opciones adicionales
+                        JFrame nuevaVentanaFrame = new JFrame("Nueva ventana");
+                        nuevaVentanaFrame.setSize(400, 300);
+                        nuevaVentanaFrame.setLocationRelativeTo(null);
+                        // Aquí agrega los componentes necesarios para la nueva ventana
+                        nuevaVentanaFrame.setVisible(true);
+                    }
+                });
+            }
+        });
     }
 
     public void actionPerformed(ActionEvent e) {
