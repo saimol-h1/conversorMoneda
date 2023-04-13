@@ -106,6 +106,16 @@ public class interfaceUs extends JFrame implements ActionListener{
                     String monedaDestino = (String) comboBoxMonedaDestino.getSelectedItem();
                     double resultado = ConversorMoneda.convertirDesdeCOP(monedaDestino, cantidad);
                     JOptionPane.showMessageDialog(ventanaCorrespondiente, String.format("%.2f %s son %.2f %s", cantidad, monedaOrigen, resultado, monedaDestino));
+                    int respuesta = JOptionPane.showConfirmDialog(ventanaCorrespondiente, "¿Desea realizar otra conversión?", "Confirmación", JOptionPane.YES_NO_CANCEL_OPTION);
+
+                    if (respuesta == JOptionPane.YES_OPTION) {
+                        // Cerrar la ventana actual y volver al menú principal
+                        ventanaCorrespondiente.dispose();
+                    } else {
+                        // Cerrar completamente el programa
+                        JOptionPane.showMessageDialog(ventanaCorrespondiente, "Programa finalizado.");
+                        System.exit(0);
+                    }
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(ventanaCorrespondiente, "Error: la cantidad debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -163,6 +173,16 @@ public class interfaceUs extends JFrame implements ActionListener{
                     String temperaturaDestino = (String) comboBoxtemperaturaDestino.getSelectedItem();
                     double resultado = ConversorTemperatura.convertirACualquierUnidadDesdeCelsius(temperaturaDestino, ConversorTemperatura.convertirACelsiusDesdeCualquierUnidad(temperaturaOrigen, cantidad));
                     JOptionPane.showMessageDialog(ventanaCorrespondiente, String.format("%.2f grados %s son %.2f grados %s", cantidad, temperaturaOrigen, resultado, temperaturaDestino));
+                    int respuesta = JOptionPane.showConfirmDialog(ventanaCorrespondiente, "¿Desea realizar otra conversión?", "Confirmación", JOptionPane.YES_NO_CANCEL_OPTION);
+
+                    if (respuesta == JOptionPane.YES_OPTION) {
+                        // Cerrar la ventana actual y volver al menú principal
+                        ventanaCorrespondiente.dispose();
+                    } else {
+                        // Cerrar completamente el programa
+                        JOptionPane.showMessageDialog(ventanaCorrespondiente, "Programa finalizado.");
+                        System.exit(0);
+                    }
                 } catch (NumberFormatException ex){
                     JOptionPane.showMessageDialog(ventanaCorrespondiente, "Error: la cantidad debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -171,6 +191,7 @@ public class interfaceUs extends JFrame implements ActionListener{
         ventanaCorrespondiente.pack();
         ventanaCorrespondiente.setLocationRelativeTo(null);
         ventanaCorrespondiente.setVisible(true);
+
     }
 
 
