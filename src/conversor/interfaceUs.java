@@ -44,22 +44,7 @@ public class interfaceUs extends JFrame implements ActionListener{
                 if (opcionSeleccionada == 0) {
                     mostrarVentanaConversorMoneda();
                 } else if (opcionSeleccionada == 1) {
-                    ventanaCorrespondiente = new JFrame("Conversor de Temperatura");
-                    JTextField textField = new JTextField(10);
-                    JPanel panel = new JPanel();
-                    panel.add(new JLabel("Introduce la cantidad a convertir:"));
-                    panel.add(textField);
-                    JButton okButton = new JButton("OK");
-
-                    JButton cancelButton = new JButton("Cancelar");
-                    cancelButton.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            ventanaCorrespondiente.dispose();
-                        }
-                    });
-                    panel.add(okButton);
-                    panel.add(cancelButton);
-                    ventanaCorrespondiente.add(panel);
+                    mostrarVentanaConversorTemperatura();
                 }
 
                 ventanaCorrespondiente.setSize(400, 200);
@@ -126,10 +111,68 @@ public class interfaceUs extends JFrame implements ActionListener{
                 }
             }
         });
+
         ventanaCorrespondiente.pack();
         ventanaCorrespondiente.setLocationRelativeTo(null);
         ventanaCorrespondiente.setVisible(true);
     }
+    private void mostrarVentanaConversorTemperatura() {
+        ventanaCorrespondiente = new JFrame("Conversor de temperatura");
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JTextField textFieldCantidad = new JTextField();
+        inputPanel.add(new JLabel("Introduce la temperatura a convertir:"));
+        inputPanel.add(textFieldCantidad);
+
+        JComboBox<String> comboBoxtemperaturaOrigen = new JComboBox<>(new String[]{"Celsius"});
+        inputPanel.add(new JLabel("Unidad de origen:"));
+        inputPanel.add(comboBoxtemperaturaOrigen);
+
+        JComboBox<String> comboBoxtemperaturaDestino = new JComboBox<>(new String[]{"Fahrenheit", "Kelvin"});
+        inputPanel.add(new JLabel("Unidad de destino:"));
+        inputPanel.add(comboBoxtemperaturaDestino);
+
+        panel.add(inputPanel, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton okButton = new JButton("OK");
+        JButton cancelButton = new JButton("Cancelar");
+
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        ventanaCorrespondiente.add(panel);
+
+        cancelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ventanaCorrespondiente.dispose();
+            }
+        });
+
+        okButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double cantidad = Double.parseDouble(textFieldCantidad.getText());
+                    String temperaturaOrigen = (String) comboBoxtemperaturaOrigen.getSelectedItem();
+                    String temperaturaDestino = (String) comboBoxtemperaturaDestino.getSelectedItem();
+                    double resultado = ConversorTemperatura.convertirACualquierUnidadDesdeCelsius(temperaturaDestino, ConversorTemperatura.convertirACelsiusDesdeCualquierUnidad(temperaturaOrigen, cantidad));
+                    JOptionPane.showMessageDialog(ventanaCorrespondiente, String.format("%.2f grados %s son %.2f grados %s", cantidad, temperaturaOrigen, resultado, temperaturaDestino));
+                } catch (NumberFormatException ex){
+                    JOptionPane.showMessageDialog(ventanaCorrespondiente, "Error: la cantidad debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        ventanaCorrespondiente.pack();
+        ventanaCorrespondiente.setLocationRelativeTo(null);
+        ventanaCorrespondiente.setVisible(true);
+    }
+
 
 
 

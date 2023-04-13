@@ -1,37 +1,40 @@
 package conversor;
 
 public class ConversorTemperatura {
-    public static double convertir(double valor, String origen, String destino) {
-        double resultado = 0.0;
+    private static final double FAHRENHEIT_A_CELSIUS = 0.55555555556;
+    private static final double KELVIN_A_CELSIUS = 273.15;
 
-        if (origen.equals("Celsius")) {
-            if (destino.equals("Fahrenheit")) {
-                resultado = valor * 1.8 + 32.0;
-            } else if (destino.equals("Kelvin")) {
-                resultado = valor + 273.15;
-            } else {
-                resultado = valor;
-            }
-        } else if (origen.equals("Fahrenheit")) {
-            if (destino.equals("Celsius")) {
-                resultado = (valor - 32.0) / 1.8;
-            } else if (destino.equals("Kelvin")) {
-                resultado = (valor + 459.67) / 1.8;
-            } else {
-                resultado = valor;
-            }
-        } else if (origen.equals("Kelvin")) {
-            if (destino.equals("Celsius")) {
-                resultado = valor - 273.15;
-            } else if (destino.equals("Fahrenheit")) {
-                resultado = valor * 1.8 - 459.67;
-            } else {
-                resultado = valor;
-            }
-        } else {
-            resultado = valor;
+
+    public static double convertirACualquierUnidadDesdeCelsius(String unidadDestino, double cantidad) {
+        double temperaturaIntermedia = 0;
+        switch (unidadDestino) {
+            case "Fahrenheit":
+                temperaturaIntermedia = cantidad * 1.8 + 32;
+                break;
+            case "Kelvin":
+                temperaturaIntermedia = cantidad + KELVIN_A_CELSIUS;
+                break;
+            default:
+                temperaturaIntermedia = cantidad;
+                break;
         }
-
-        return resultado;
+        return temperaturaIntermedia;
     }
+
+    public static double convertirACelsiusDesdeCualquierUnidad(String unidadOrigen, double cantidad) {
+        double temperaturaIntermedia = 0;
+        switch (unidadOrigen) {
+            case "Fahrenheit":
+                temperaturaIntermedia = (cantidad - 32) * FAHRENHEIT_A_CELSIUS;
+                break;
+            case "Kelvin":
+                temperaturaIntermedia = cantidad - KELVIN_A_CELSIUS;
+                break;
+            default:
+                temperaturaIntermedia = cantidad;
+                break;
+        }
+        return temperaturaIntermedia;
+    }
+
 }
