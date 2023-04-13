@@ -3,6 +3,7 @@ package conversor;
 import javafx.scene.control.ComboBox;
 import javax.swing.ComboBoxEditor;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
@@ -10,6 +11,7 @@ import javax.swing.JOptionPane;
 public class interfaceUs extends JFrame implements ActionListener{
     private JComboBox<String> comboBox;
     private JFrame ventanaCorrespondiente;
+
     public static void main(String[] args) {
         interfaceUs frame = new interfaceUs();
         frame.setVisible(true);
@@ -40,46 +42,15 @@ public class interfaceUs extends JFrame implements ActionListener{
                 int opcionSeleccionada = comboBox.getSelectedIndex();
 
                 if (opcionSeleccionada == 0) {
-                    ventanaCorrespondiente = new JFrame("Conversor de moneda");
-                    JTextField textField = new JTextField(10);
-                    JPanel panel = new JPanel();
-                    panel.add(new JLabel("Introduce un número:"));
-                    panel.add(textField);
-                    JButton okButton = new JButton("OK");
-                    okButton.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            ventanaCorrespondiente.dispose();
-                            String texto = textField.getText();
-                            double numero = Double.parseDouble(texto);
-                            double resultado = numero * 1.23; // Conversión a dólares
-                            JOptionPane.showMessageDialog(null, numero + " euros son " + resultado + " dólares.");
-                        }
-                    });
-                    JButton cancelButton = new JButton("Cancelar");
-                    cancelButton.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            ventanaCorrespondiente.dispose();
-                        }
-                    });
-                    panel.add(okButton);
-                    panel.add(cancelButton);
-                    ventanaCorrespondiente.add(panel);
+                    mostrarVentanaConversorMoneda();
                 } else if (opcionSeleccionada == 1) {
                     ventanaCorrespondiente = new JFrame("Conversor de Temperatura");
                     JTextField textField = new JTextField(10);
                     JPanel panel = new JPanel();
-                    panel.add(new JLabel("Introduce un número:"));
+                    panel.add(new JLabel("Introduce la cantidad a convertir:"));
                     panel.add(textField);
                     JButton okButton = new JButton("OK");
-                    okButton.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            ventanaCorrespondiente.dispose();
-                            String texto = textField.getText();
-                            double numero = Double.parseDouble(texto);
-                            double resultado = numero * 1.23; // Conversión a dólares
-                            JOptionPane.showMessageDialog(null, numero + " euros son " + resultado + " dólares.");
-                        }
-                    });
+
                     JButton cancelButton = new JButton("Cancelar");
                     cancelButton.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
@@ -91,7 +62,7 @@ public class interfaceUs extends JFrame implements ActionListener{
                     ventanaCorrespondiente.add(panel);
                 }
 
-                ventanaCorrespondiente.setSize(400, 300);
+                ventanaCorrespondiente.setSize(400, 200);
                 ventanaCorrespondiente.setLocationRelativeTo(null);
                 ventanaCorrespondiente.setVisible(true);
             }
@@ -102,4 +73,64 @@ public class interfaceUs extends JFrame implements ActionListener{
         String seleccion = (String) comboBox.getSelectedItem();
         JOptionPane.showMessageDialog(this, "Seleccionaste " + seleccion);
     }
+
+    private void mostrarVentanaConversorMoneda() {
+        ventanaCorrespondiente = new JFrame("Conversor de moneda");
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JTextField textFieldCantidad = new JTextField();
+        inputPanel.add(new JLabel("Introduce la cantidad a convertir:"));
+        inputPanel.add(textFieldCantidad);
+
+        JComboBox<String> comboBoxMonedaOrigen = new JComboBox<>(new String[]{"Peso Colombiano"});
+        inputPanel.add(new JLabel("Moneda de origen:"));
+        inputPanel.add(comboBoxMonedaOrigen);
+
+        JComboBox<String> comboBoxMonedaDestino = new JComboBox<>(new String[]{"Dólar", "Euro", "Libra Esterlina", "Yen Japonés", "Won sul-coreano"});
+        inputPanel.add(new JLabel("Moneda de destino:"));
+        inputPanel.add(comboBoxMonedaDestino);
+
+        panel.add(inputPanel, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton okButton = new JButton("OK");
+        JButton cancelButton = new JButton("Cancelar");
+
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        ventanaCorrespondiente.add(panel);
+
+        cancelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ventanaCorrespondiente.dispose();
+            }
+        });
+
+        okButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double cantidad = Double.parseDouble(textFieldCantidad.getText());
+                    String monedaOrigen = (String) comboBoxMonedaOrigen.getSelectedItem();
+                    String monedaDestino = (String) comboBoxMonedaDestino.getSelectedItem();
+                    double resultado = ConversorMoneda.convertirDesdeCOP(monedaDestino, cantidad);
+                    JOptionPane.showMessageDialog(ventanaCorrespondiente, String.format("%.2f %s son %.2f %s", cantidad, monedaOrigen, resultado, monedaDestino));
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(ventanaCorrespondiente, "Error: la cantidad debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        ventanaCorrespondiente.pack();
+        ventanaCorrespondiente.setLocationRelativeTo(null);
+        ventanaCorrespondiente.setVisible(true);
+    }
+
+
+
 }
